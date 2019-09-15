@@ -87,8 +87,8 @@ function getBossAsDate(bossId) {
     return date
 }
 
-function getDailyBosses(day) {
-    const day = data[day]
+function getDailyBosses(dayInt) {
+    const day = data[dayInt]
     var message = ""
 
     if(day[1] != null) message += day[1] + "(02:00), "
@@ -98,7 +98,7 @@ function getDailyBosses(day) {
     if(day[5] != null) message += day[5] + "(20:00), "
     if(day[6] != null) message += day[6] + "(23:30), "
 
-    return message.split(0, -2)
+    return message.slice(0, -2)
 }
 
 module.exports.getBossAsDate = getBossAsDate

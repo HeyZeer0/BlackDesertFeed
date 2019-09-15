@@ -65,7 +65,7 @@ function getStringDateDiff(diffHours, diffMinutes) {
 var today = false
 function sendTodayMessage() {
     var date = new Date()
-    if(date.getHours != 0) {
+    if(date.getHours() != 0) {
         today = false
         return
     }
