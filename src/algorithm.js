@@ -33,22 +33,23 @@ function updateBossStatus() {
     }
 
     //verifies if the next message should be sent
-    var sendMessage = false
-    if(diffHours == 1 && diffMinutes == 0 && !states[0]) {
-        sendMessage = true
-        states[0] = true
-    }else if(diffHours == 0 && diffMinutes == 30 && !states[1]) {
-        sendMessage = true
-        states[1] = true
-    }else if(diffHours == 0 && diffMinutes == 5 && !stats[2]) {
-        sendMessage = true
+    var shouldSend = false
+
+    if(diffHours == 0 && diffMinutes <= 5 && !states[2]) {
+        shouldSend = true
         states[2] = true
+    }else if(diffHours == 0 && diffMinutes <= 30 && !states[1]) {
+        shouldSend = true
+        states[1] = true
+    }else if((diffHours == 1 || diffMinutes <= 60) && !states[0]) {
+        shouldSend = true
+        states[0] = true
     }
 
-    if(!sendMessage) return
+    if(!shouldSend) return
     
     sendMessage(false, getStringDateDiff(diffHours, diffMinutes))
-    console.log("[-] Sent time left to discord, current status = " + states[0] + ", " + state[1], + ", " + state[2])
+    console.log("[-] Sent time left to discord, current status = " + states[0] + ", " + states[1], + ", " + states[2])
 }
 
 function getCurrentDateDiff() {
@@ -59,7 +60,7 @@ function getCurrentDateDiff() {
 }
 
 function getStringDateDiff(diffHours, diffMinutes) {
-    return diffHours + (diffHours == 1 ? " hora" : " horas") + " e " + diffMinutes + " " + (diffMinutes == 1 ? "minuto" : "minutos")
+    return (diffHours != 0 ? diffHours + (diffHours == 1 ? " hora" : " horas") + " e " : "") + (diffMinutes != 0 ? diffMinutes + " " + (diffMinutes == 1 ? "minuto" : "minutos") : "")
 }
 
 var today = false
