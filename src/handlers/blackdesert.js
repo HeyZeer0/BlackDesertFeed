@@ -32,27 +32,28 @@ const data = {
 }
 
 function getBossById(id) {
-    var date = new Date()
-
-    return data[date.getDay()][id]
+    return data[getCorrectDay().getDay()][id]
 }
 
 function getCorrectDay() {
     var date = new Date()
 
-    var day = date.getDay();
-    if (date.getHours() >= 23 && date.getMinutes() >= 30) {
-        if (day + 1 > 6) day = 0
-        else day += 1
+    var toAdd = date.getHours() + (24 - date.getHours())
+    if(date.getHours() >= 20 && data[date.getDay()][6] == null) {
+        date.setHours(toAdd)
+    }
+    else if ((date.getHours() >= 23 && date.getMinutes() >= 30)) {
+        date.setHours(toAdd)
     }
 
-    return day
+    return date
 }
 
 function getNextBossId() {
-    var result = 1
+    var date = getCorrectDay()
 
-    var day = data[getCorrectDay()]
+    var result = 1
+    var day = data[date.getDay()]
 
     if (date.getHours() >= 23 && date.getMinutes() >= 30) result = 1
     else if (date.getHours() > 20) result = 6
@@ -70,15 +71,20 @@ function getNextBossId() {
 }
 
 function getBossAsDate(bossId) {
-    var date = new Date()
+    var date = getCorrectDay()
 
-    if (bossId == 1) return new Date(date.getFullYear(), date.getMonth(), date.getDate(), 2)
-    else if (bossId == 2) return new Date(date.getFullYear(), date.getMonth(), date.getDate(), 11)
-    else if (bossId == 3) return new Date(date.getFullYear(), date.getMonth(), date.getDate(), 16)
-    else if (bossId == 4) return new Date(date.getFullYear(), date.getMonth(), date.getDate(), 18)
-    else if (bossId == 5) return new Date(date.getFullYear(), date.getMonth(), date.getDate(), 20)
+    date.setMinutes(0)
+    if (bossId == 1) date.setHours(2)
+    else if (bossId == 2) date.setHours(11)
+    else if (bossId == 3) date.setHours(16)
+    else if (bossId == 4) date.setHours(18)
+    else if (bossId == 5) date.setHours(20)
+    else {
+        date.setHours(23)
+        date.setMinutes(30)
+    }
 
-    return new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 30)
+    return date
 }
 
 module.exports.getBossAsDate = getBossAsDate

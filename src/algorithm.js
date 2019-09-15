@@ -4,12 +4,18 @@ const webhook = require("./handlers/webhook")
 var currentBoss = -1;
 var states = [ false, false, false ] //1h, 30m, 5m
 
-async function updateBossStatus() {
+function updateBossStatus() {        
     if(currentBoss == -1) {
         currentBoss = bdo.getNextBossId()
+
+        const dateDiff = getCurrentDateDiff()
+        const diffHours = Math.floor(dateDiff / 3600000 % 24)
+        const diffMinutes = Math.floor(dateDiff / 60000 % 60)
+
+        console.log("[*] Detected Next Boss = " + currentBoss + " - " + bdo.getBossById(currentBoss) + " - " + getStringDateDiff(diffHours, diffMinutes))
         return
     }
-        
+
     const dateDiff = getCurrentDateDiff()
     const diffHours = Math.floor(dateDiff / 3600000 % 24)
     const diffMinutes = Math.floor(dateDiff / 60000 % 60)
@@ -17,9 +23,10 @@ async function updateBossStatus() {
     //check if the boss spawned
     const nextBoss = bdo.getNextBossId()
     if(currentBoss != nextBoss) {
-        await sendMessage(true, getStringDateDiff(diffHours, diffMinutes))
+        sendMessage(true, getStringDateDiff(diffHours, diffMinutes))
+        console.log("\n[*] Last Boss Spawned, Next One = " + currentBoss + " - " + bdo.getBossById(currentBoss))
 
-        states = [ false, false, false ]
+        states = [ false, false, false ] //reset the states
         return
     }
 
@@ -36,7 +43,10 @@ async function updateBossStatus() {
         states[2] = true
     }
 
-    if(sendMessage) await sendMessage(false, getStringDateDiff(diffHours, diffMinutes))
+    if(!sendMessage) return
+    
+    sendMessage(false, getStringDateDiff(diffHours, diffMinutes))
+    console.log("[-] Sent time left to discord, current status = " + states[0] + ", " + state[1], + ", " + state[2])
 }
 
 function getCurrentDateDiff() {
@@ -50,24 +60,24 @@ function getStringDateDiff(diffHours, diffMinutes) {
     return diffHours + (diffHours == 1 ? " hora" : " horas") + " e " + diffMinutes + " " + (diffMinutes == 1 ? "minuto" : "minutos")
 }
 
-async function sendMessage(spawned, timeLeft) {
+function sendMessage(spawned, timeLeft) {
     var bossName = bdo.getBossById(currentBoss)
 
     if (spawned) {
         if (bossName.includes("&")) {
-            await webhook.publishMessage(":game_die: Os bosses ``" + bossName + "`` irão spawnar em instantes!")
+            webhook.publishMessage(":game_die: Os bosses ``" + bossName + "`` irão spawnar em instantes!")
             return
         }
-        await webhook.publishMessage(":game_die: O boss ``" + bossName + "`` irá spawnar em instantes!")
+        webhook.publishMessage(":game_die: O boss ``" + bossName + "`` irá spawnar em instantes!")
         return
     }
 
     if (bossName.includes("&")) {
-        await webhook.publishMessage(":game_die: Os bosses ``" + bossName + "`` irão spawnar em ``" + timeLeft + "``")
+        webhook.publishMessage(":game_die: Os bosses ``" + bossName + "`` irão spawnar em ``" + timeLeft + "``")
         return
     }
 
-    await webhook.publishMessage(":game_die: O boss ``" + bossName + "`` irá spawnar em ``" + timeLeft + "``")
+    webhook.publishMessage(":game_die: O boss ``" + bossName + "`` irá spawnar em ``" + timeLeft + "``")
 }
 
 module.exports.updateBossStatus = updateBossStatus

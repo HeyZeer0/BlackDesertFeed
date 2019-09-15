@@ -1,8 +1,9 @@
 const algorithm = require("./algorithm")
 const config = require("../data/config.json")
 
-async function startAlgorithm() {
-    await algorithm.updateBossStatus()
+function startAlgorithm() {
+    algorithm.updateBossStatus()
 }
 
+console.log("[-] Black Desert Feed - Successfully Initiated")
 setInterval(startAlgorithm, config["update_delay"])
