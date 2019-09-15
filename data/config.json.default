@@ -1,0 +1,8 @@
+{
+    "webhook": {
+        "path": "/api/webhooks/yourChannel/yourWebhookKey",
+        "username": "Black Desert",
+        "avatar_url": "https://myrealdomain.com/images/black-desert-addons-5.png"
+    },
+    "update_delay": 3000
+}
