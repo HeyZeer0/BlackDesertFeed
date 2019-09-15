@@ -4,7 +4,9 @@ const webhook = require("./handlers/webhook")
 var currentBoss = -1;
 var states = [ false, false, false ] //1h, 30m, 5m
 
-function updateBossStatus() {        
+function updateBossStatus() {
+    sendTodayMessage()
+
     if(currentBoss == -1) {
         currentBoss = bdo.getNextBossId()
 
@@ -58,6 +60,20 @@ function getCurrentDateDiff() {
 
 function getStringDateDiff(diffHours, diffMinutes) {
     return diffHours + (diffHours == 1 ? " hora" : " horas") + " e " + diffMinutes + " " + (diffMinutes == 1 ? "minuto" : "minutos")
+}
+
+var today = false
+function sendTodayMessage() {
+    var date = new Date()
+    if(date.getHours != 0) {
+        today = false
+        return
+    }
+    if(today) return
+    today = true
+
+    webhook.publishMessage(":game_die: Os bosses de hoje serão: ``" + bdo.getDailyBosses(date.getDay()) + "``")
+    console.log("[*] Sent today bosses to discord")
 }
 
 function sendMessage(spawned, timeLeft) {
