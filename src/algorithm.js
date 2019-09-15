@@ -25,6 +25,7 @@ function updateBossStatus() {
     //check if the boss spawned
     const nextBoss = bdo.getNextBossId()
     if(currentBoss !== nextBoss) {
+        currentBoss = nextBoss
         sendMessage(true, getStringDateDiff(diffHours, diffMinutes))
         console.log("\n[*] Last Boss Spawned, Next One = " + currentBoss + " - " + bdo.getBossById(currentBoss))
 
