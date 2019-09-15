@@ -19,8 +19,6 @@ async function publishMessage(message) {
         'Content-Length': Buffer.byteLength(JSON.stringify(webhookData))
     }
 
-    console.log(" - Sending Discord WebHook (" + message + ")")
-
     var request = https.request(discordWebhook)
     request.write(JSON.stringify(webhookData))
     await request.end()

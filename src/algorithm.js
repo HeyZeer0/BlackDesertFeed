@@ -14,7 +14,7 @@ function updateBossStatus() {
         const diffHours = Math.floor(dateDiff / 3600000 % 24)
         const diffMinutes = Math.floor(dateDiff / 60000 % 60)
 
-        console.log("[*] Detected Next Boss = " + currentBoss + " - " + bdo.getBossById(currentBoss) + " - " + getStringDateDiff(diffHours, diffMinutes))
+        console.log("\n[*] Detected Next Boss = " + currentBoss + " - " + bdo.getBossById(currentBoss) + " - " + getStringDateDiff(diffHours, diffMinutes))
         return
     }
 
@@ -24,7 +24,7 @@ function updateBossStatus() {
 
     //check if the boss spawned
     const nextBoss = bdo.getNextBossId()
-    if(currentBoss != nextBoss) {
+    if(currentBoss !== nextBoss) {
         sendMessage(true, getStringDateDiff(diffHours, diffMinutes))
         console.log("\n[*] Last Boss Spawned, Next One = " + currentBoss + " - " + bdo.getBossById(currentBoss))
 
@@ -49,7 +49,7 @@ function updateBossStatus() {
     if(!shouldSend) return
     
     sendMessage(false, getStringDateDiff(diffHours, diffMinutes))
-    console.log("[-] Sent time left to discord, current status = " + states[0] + ", " + states[1], + ", " + states[2])
+    console.log("[-] Sent time left to discord, current status = " + states[0] + ", " + states[1] + ", " + states[2])
 }
 
 function getCurrentDateDiff() {

@@ -56,11 +56,11 @@ function getNextBossId() {
     var day = data[date.getDay()]
 
     if (date.getHours() >= 23 && date.getMinutes() >= 30) result = 1
-    else if (date.getHours() > 20) result = 6
-    else if (date.getHours() > 18) result = 5
-    else if (date.getHours() > 16) result = 4
-    else if (date.getHours() > 11) result = 3
-    else if (date.getHours() > 2) result = 2
+    else if (date.getHours() >= 20) result = 6
+    else if (date.getHours() >= 18) result = 5
+    else if (date.getHours() >= 16) result = 4
+    else if (date.getHours() >= 11) result = 3
+    else if (date.getHours() >= 2) result = 2
 
     if (day[result] == null) {
         if (result + 1 > 6) result = 1
